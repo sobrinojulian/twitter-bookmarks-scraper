@@ -7,15 +7,11 @@ const scrap = async page => {
     window.isInPage = e => e === document.body ? false : document.body.contains(e)
     window.endCondition = () => {
       const e = document.querySelector(SELECTORS.fifthTwit);
-      if (isInPage(e) && e.childElementCount === 0) {
-        return true;
-      } else {
-        return false;
-      }
+      return (isInPage(e) && (!(e.hasChildNodes()))) ? true : false
     };
   }, SELECTORS);
 
-  // Scroll
+  // Scroll and Scrap
   await page.evaluate(() => {
     const x = 0;
     const y = 3 * 1000;
@@ -24,10 +20,15 @@ const scrap = async page => {
       // While there is Try Again Button, click on it
       const tryAgainButton = document.querySelector(SELECTORS.tryAgainButton);
       while (isInPage(tryAgainButton)) tryAgainButton.click();
+      // Scrap
+
       // Scroll
       window.scrollBy(x, y);
       // Break if endCondition
-      if (endCondition()) return clearInterval(timer);
+      if (endCondition()) {
+        console.log("THIS IS THE END")
+        return clearInterval(timer);
+      }
     }, wait);
   });
 };
