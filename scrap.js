@@ -15,7 +15,7 @@ const scrap = async page => {
   // Scroll and Scrap
   await page.evaluate(() => {
     const x = 0;
-    const y = 3 * 1000;
+    const y = 1000;
     const wait = 0.5 * 1000;
     const foo = [];
     const timer = setInterval(() => {
@@ -37,14 +37,22 @@ const scrap = async page => {
         const prefix = `div:nth-child(${i + 1}) > `;
 
         const acc = twit.querySelector(`${prefix} ${SELECTORS.acc}`);
-
         //const name = twit.querySelector(`${prefix} ${SELECTORS.name}`);
-        //console.log(name)
+        const date = twit.querySelector(`${prefix} ${SELECTORS.date}`);
         const content = twit.querySelector(`${prefix} ${SELECTORS.content}`);
-        if (acc && content) {
+        const likes = twit.querySelector(`${prefix} ${SELECTORS.likes}`);
+        const retwits = twit.querySelector(`${prefix} ${SELECTORS.retwits}`);
+
+        if (acc && date && content && likes && retwits) {
+          const obj = {acc: acc.innerText, date: date.innerText, content: content.innerText, likes: likes.innerText, retwits: retwits.innerText}
+          foo.push(obj)
+          /*
           console.log(acc.innerText);
-          //console.log(name.innerText);
+          console.log(date.innerText);
           console.log(content.innerText);
+          console.log(likes.innerText);
+          console.log(retwits.innerText);
+          */
         } else {
           break;
         }
@@ -53,6 +61,7 @@ const scrap = async page => {
       // Scroll
       window.scrollBy(x, y);
     }, wait);
+    console.log(foo)
   });
 };
 
