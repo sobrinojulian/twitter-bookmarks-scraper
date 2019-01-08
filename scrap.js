@@ -5,9 +5,9 @@ const scrap = async page => {
   await page.evaluate(SELECTORS => {
     window.SELECTORS = SELECTORS;
     window.isInPage = e => e === document.body ? false : document.body.contains(e)
-    window.endCondition = () => {
+    window.isEndOfScrolling = () => {
       const e = document.querySelector(SELECTORS.fifthTwit);
-      return (isInPage(e) && (!(e.hasChildNodes()))) ? true : false
+      return (isInPage(e) && (!(e.hasChildNodes())))
     };
   }, SELECTORS);
 
@@ -24,10 +24,9 @@ const scrap = async page => {
 
       // Scroll
       window.scrollBy(x, y);
-      // Break if endCondition
-      if (endCondition()) {
-        console.log("THIS IS THE END")
-        return clearInterval(timer);
+
+      // Break
+      if (isEndOfScrolling()) return clearInterval(timer);
       }
     }, wait);
   });
