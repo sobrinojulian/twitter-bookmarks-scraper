@@ -17,7 +17,8 @@ const scrap = async page => {
     const x = 0;
     const y = 1000;
     const wait = 0.5 * 1000;
-    const foo = [];
+
+    let foo = [];
     const timer = setInterval(() => {
       // While there is Try Again Button, click on it
       const tryAgainButton = document.querySelector(SELECTORS.tryAgainButton);
@@ -26,6 +27,7 @@ const scrap = async page => {
       // Break
       if (isEndOfScrolling()) {
         console.log("THIS IS THE END");
+        //const bar = foo.filter(e => e.acc === "@awake");
         console.log(foo);
         return clearInterval(timer);
       }
@@ -44,24 +46,32 @@ const scrap = async page => {
         const retwits = twit.querySelector(`${prefix} ${SELECTORS.retwits}`);
 
         if (acc && date && content && likes && retwits) {
-          const obj = {acc: acc.innerText, date: date.innerText, content: content.innerText, likes: likes.innerText, retwits: retwits.innerText}
-          foo.push(obj)
-          /*
-          console.log(acc.innerText);
-          console.log(date.innerText);
-          console.log(content.innerText);
-          console.log(likes.innerText);
-          console.log(retwits.innerText);
-          */
-        } else {
-          break;
+          const obj = {
+            acc: acc.innerText,
+            date: date.innerText,
+            content: content.innerText,
+            likes: likes.innerText,
+            retwits: retwits.innerText
+          };
+          if (
+            !foo.some(e => {
+              return (
+                e.acc === acc.innerText &&
+                e.date === date.innerText &&
+                e.content === content.innerText &&
+                e.likes === likes.innerText &&
+                e.retwits === retwits.innerText
+              );
+            })
+          ) {
+            foo.push(obj);
+          }
         }
       }
 
       // Scroll
       window.scrollBy(x, y);
     }, wait);
-    console.log(foo)
   });
 };
 
