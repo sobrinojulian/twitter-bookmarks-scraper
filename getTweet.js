@@ -14,18 +14,19 @@ const getTweet = async tweet => {
   const retweets = await tweet.$(SELECTORS.retweets);
   const likes = await tweet.$(SELECTORS.likes);
 
-  console.log(await src(avatar, `src`));
-  console.log(await innerText(id));
-  console.log(await innerText(name));
+  return {
+    avatar: await src(avatar),
+    id: await innerText(id),
+    name: await innerText(name),
 
-  console.log(await dateTime(date));
-  console.log(await innerText(replyTo));
-  console.log(await innerText(text));
+    date: await dateTime(date),
+    replyTo: await innerText(replyTo),
+    text: await innerText(text),
 
-  console.log(await innerText(replies));
-  console.log(await innerText(retweets));
-  console.log(await innerText(likes));
-  console.log();
+    replies: await innerText(replies),
+    retweets: await innerText(retweets),
+    likes: await innerText(likes)
+  };
 };
 
 module.exports = getTweet;
