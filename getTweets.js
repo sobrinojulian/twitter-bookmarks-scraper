@@ -1,48 +1,32 @@
-const SELECTORS = require("./selectors");
-
-const innerText = async elm => {
-  return await elm.evaluate(node => node.innerText);
-};
-
-const getProperty = async (elm, property) => {
-  return await (await elm.getProperty(property)).jsonValue();
-};
-
-const getAttribute = async (elm, attribute) => {
-  return await elm.getAttribute(attribute);
-};
+const SELECTORS = require(`./selectors`);
+const { innerText, src, dateTime } = require(`./helpers`);
 
 const getTweets = async page => {
   const url = `https://mobile.twitter.com/i/bookmarks`;
   const waitUntilFullLoad = { waitUntil: `networkidle2` };
   await page.goto(url, waitUntilFullLoad);
 
-  const articles = await page.$$("article");
-  for (const article of articles) {
-    const avatar = await article.$(SELECTORS.avatar);
+  const tweets = await page.$$(`article`);
+  for (const tweet of tweets) {
+    const avatar = await tweet.$(SELECTORS.avatar);
+    const id = await tweet.$(SELECTORS.id);
+    const name = await tweet.$(SELECTORS.name);
 
-    const id = await article.$(SELECTORS.id);
-    const name = await article.$(SELECTORS.name);
-    const date = await article.$(SELECTORS.date);
+    const date = await tweet.$(SELECTORS.date);
+    const replyTo = await tweet.$(SELECTORS.replyTo);
+    const text = await tweet.$(SELECTORS.text);
 
-    const replyTo = await article.$(SELECTORS.replyTo);
-    const text = await article.$(SELECTORS.text);
-    //const media = await article.$(SELECTORS.media);
+    const replies = await tweet.$(SELECTORS.replies);
+    const retweets = await tweet.$(SELECTORS.retweets);
+    const likes = await tweet.$(SELECTORS.likes);
 
-    const replies = await article.$(SELECTORS.replies);
-    const retweets = await article.$(SELECTORS.retweets);
-    const likes = await article.$(SELECTORS.likes);
-
-
-    console.log(await getProperty(avatar, "src"));
-
+    console.log(await src(avatar));
     console.log(await innerText(id));
     console.log(await innerText(name));
-    console.log(await getAttribute(date, "datetime"));
 
+    console.log(await dateTime(date))
     console.log(await innerText(replyTo));
     console.log(await innerText(text));
-    //console.log(await innerText(media));
 
     console.log(await innerText(replies));
     console.log(await innerText(retweets));

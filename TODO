@@ -11,6 +11,9 @@
 - Standard.js y src dir
 - Preetify JSON
 
+# Refactor
+- if (!elm) return ``
+
 # CLI:
 ```
 $ tw --login, -l <USERNAME>
