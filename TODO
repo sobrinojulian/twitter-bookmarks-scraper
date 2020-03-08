@@ -1,0 +1,20 @@
+# Now
+
+
+# Tweets
+- Media (Gif, Video, Image)
+- Links
+- Hashtags
+
+#Despues
+- Super refactor
+- Standard.js y src dir
+- Preetify JSON
+
+# CLI:
+```
+$ tw --login, -l <USERNAME>
+     --count, -c <COUNT>
+     --fast-update, -f
+```
+More: https://instaloader.github.io/cli-options.html

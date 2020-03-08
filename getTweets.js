@@ -1,16 +1,15 @@
 const SELECTORS = require("./selectors");
 
 const innerText = async elm => {
-  if (elm) return await elm.evaluate(node => node.innerText);
-  return "";
+  return await elm.evaluate(node => node.innerText);
 };
 
 const getProperty = async (elm, property) => {
   return await (await elm.getProperty(property)).jsonValue();
 };
 
-const cleanReplyTo = async str => {
-  return str.split("Replying to \n")[1];
+const getAttribute = async (elm, attribute) => {
+  return await elm.getAttribute(attribute);
 };
 
 const getTweets = async page => {
@@ -23,33 +22,32 @@ const getTweets = async page => {
     const avatar = await article.$(SELECTORS.avatar);
 
     const id = await article.$(SELECTORS.id);
-    /*
     const name = await article.$(SELECTORS.name);
     const date = await article.$(SELECTORS.date);
 
     const replyTo = await article.$(SELECTORS.replyTo);
     const text = await article.$(SELECTORS.text);
     //const media = await article.$(SELECTORS.media);
-    */
+
     const replies = await article.$(SELECTORS.replies);
     const retweets = await article.$(SELECTORS.retweets);
     const likes = await article.$(SELECTORS.likes);
 
+
     console.log(await getProperty(avatar, "src"));
 
     console.log(await innerText(id));
-    /*
     console.log(await innerText(name));
-    console.log(await getProperty(date, "title"));
+    console.log(await getAttribute(date, "datetime"));
 
-    console.log(await cleanReplyTo(await innerText(replyTo)));
+    console.log(await innerText(replyTo));
     console.log(await innerText(text));
     //console.log(await innerText(media));
-    */
 
     console.log(await innerText(replies));
     console.log(await innerText(retweets));
     console.log(await innerText(likes));
+    console.log();
   }
 };
 module.exports = getTweets;
