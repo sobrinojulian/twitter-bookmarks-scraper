@@ -1,18 +1,19 @@
 # Now
+- Scrolling heuristics
+- Exporting JSON
+- Fast update
 
-
-# Tweets
-- Media (Gif, Video, Image)
-- Links
-- Hashtags
-
-#Despues
-- Super refactor
 - Standard.js y src dir
-- Preetify JSON
+- README.md
+
+# Media
+- Media (Gif, Video, Image)
+- puppeter-core for Video?
+- Download media
 
 # Refactor
-- if (!elm) return ``
+- if (!elm) return `` ???
+- getLinks getHashtags
 
 # CLI:
 ```
