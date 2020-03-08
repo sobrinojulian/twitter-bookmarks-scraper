@@ -13,6 +13,11 @@ exports.dateTime = async elm => {
   return await elm.evaluate(node => node.dateTime);
 };
 
+exports.href = async elm => {
+  return await elm.evaluate(node => node.href);
+};
+
+
 exports.scrollElementTop = async (page, elm) => {
   await page.evaluate(
     elm => window.scrollBy(0, elm.getBoundingClientRect().top),
@@ -21,6 +26,6 @@ exports.scrollElementTop = async (page, elm) => {
   await page.waitFor(1000);
 };
 
-exports.setBackgroundColor = async (page, elm, color) => {
+exports.setBackgroundColor = async (elm, color) => {
   await elm.evaluate((v, color) => (v.style.backgroundColor = color), color);
 };

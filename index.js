@@ -13,6 +13,6 @@ async function run() {
   const page = (await browser.pages())[0];
 
   await login(page);
-  await getTweets(page)
+  await getTweets(browser, page)
 }
 run()
