@@ -1,15 +1,18 @@
 const puppeteer = require("puppeteer");
-const scrap = require("./scrap")
 const login = require("./login");
+const getTweets = require("./getTweets")
 
 async function run() {
   const browser = await puppeteer.launch({
-    headless: false
+    headless: false,
+    defaultViewport: null,
+    //args: [`--window-size=${(width = 499)},${(height = 1000)}`]
+    args: ["--start-maximized"],
+    devtools: true
   });
-  const page = await browser.newPage();
-  await login(page);
-  await page.goto("https://mobile.twitter.com/i/bookmarks");
-  await scrap(page)
-}
+  const page = (await browser.pages())[0];
 
-run();
+  await login(page);
+  await getTweets(page)
+}
+run()

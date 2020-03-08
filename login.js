@@ -2,17 +2,13 @@ const CREDS = require("./creds");
 const SELECTORS = require("./selectors");
 
 const login = async page => {
-  await page.goto("https://mobile.twitter.com/login");
+  const url = `https://mobile.twitter.com/login`
+  const waitUntilFullLoad = { waitUntil: `networkidle2` };
+  await page.goto(url, waitUntilFullLoad);
 
-  await page.waitForSelector(SELECTORS.username);
-  await page.click(SELECTORS.username);
-  await page.keyboard.type(CREDS.username);
+  await page.type(SELECTORS.username, CREDS.username);
+  await page.type(SELECTORS.password, CREDS.password);
 
-  await page.waitForSelector(SELECTORS.password);
-  await page.click(SELECTORS.password);
-  await page.keyboard.type(CREDS.password);
-
-  await page.waitForSelector(SELECTORS.button);
   await page.click(SELECTORS.button);
   await page.waitForNavigation();
 };
