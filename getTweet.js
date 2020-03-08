@@ -3,21 +3,46 @@ const { innerText, src, href, dateTime } = require(`./helpers`);
 const expandTcoURL = require("./expandTcoURL");
 
 const getLinks = async (browser, text) => {
+  if (!browser) return [];
+  if (!text) return [];
+
   const links = [];
   const aElementHandles = await text.$$(`a`);
   for (const a of aElementHandles) {
     const link = await href(a);
-    if (link.indexOf("t.co") === -1) {
-      // If you do not include t.co, get the URL as it is
-      links.push(link);
-    } else {
-      // If you include t.co, get the destination of the shortened URL
+    const isTco = link.indexOf("t.co") !== -1;
+    const isHashtag =
+      link.indexOf("https://mobile.twitter.com/hashtag/") !== -1;
+    if (isHashtag) continue;
+    if (isTco) {
       const expandedLink = await expandTcoURL(browser, link);
       links.push(expandedLink);
+    } else {
+      links.push(link);
     }
-    links.push(link);
   }
   return links;
+};
+
+const getHashtags = async (browser, text) => {
+  if (!browser) return [];
+  if (!text) return [];
+
+  const hashtags = [];
+  const aElementHandles = await text.$$(`a`);
+  for (const a of aElementHandles) {
+    const link = await href(a);
+    const isHashtag =
+      link.indexOf("https://mobile.twitter.com/hashtag/") !== -1;
+    if (isHashtag) {
+      const hashtag = link
+        .split("https://mobile.twitter.com/hashtag/")
+        .pop()
+        .split("?src=hashtag_click")[0];
+      hashtags.push(hashtag);
+    }
+  }
+  return hashtags;
 };
 
 const getTweet = async (browser, tweet) => {
@@ -47,7 +72,7 @@ const getTweet = async (browser, tweet) => {
     text: await innerText(text),
     media: ``,
     links: await getLinks(browser, text),
-    hashtags: [],
+    hashtags: await getHashtags(browser, text),
 
     replies: await innerText(replies),
     retweets: await innerText(retweets),
