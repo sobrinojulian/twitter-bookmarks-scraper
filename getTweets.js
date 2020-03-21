@@ -12,9 +12,7 @@ const getTweets = async (browser, page) => {
     //await scrollElementTop(page, tweet);
     //await setBackgroundColor(tweet, `lemonchiffon`);
     const data = await getTweet(browser, tweet);
-    console.log(data["links"])
-    console.log(data["hashtags"])
-    console.log()
+    console.log(data)
   }
 };
 

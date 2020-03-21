@@ -14,7 +14,13 @@ exports.dateTime = async elm => {
 };
 
 exports.href = async elm => {
+	if (!elm) return ``;
   return await elm.evaluate(node => node.href);
+};
+
+exports.childElementCount = async elm => {
+	if (!elm) return ``;
+  return await elm.evaluate(node => node.childElementCount);
 };
 
 

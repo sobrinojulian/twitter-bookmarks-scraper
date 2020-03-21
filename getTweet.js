@@ -1,5 +1,5 @@
 const SELECTORS = require(`./selectors`);
-const { innerText, src, href, dateTime } = require(`./helpers`);
+const { innerText, src, href, dateTime, childElementCount } = require(`./helpers`);
 const expandTcoURL = require("./expandTcoURL");
 
 const getLinks = async (browser, text) => {
@@ -52,14 +52,40 @@ const getTweet = async (browser, tweet) => {
   const userURL = await tweet.$(SELECTORS.userURL);
 
   const tweetURL = await tweet.$(SELECTORS.tweetURL);
-  const date = await tweet.$(SELECTORS.date);
+	const date = await tweet.$(SELECTORS.date);
+
+	const contentFrame = await tweet.$(SELECTORS.contentFrame)
+	const contentFramechildElementCount = await childElementCount(contentFrame)
+
+	let replyTo = ''
+	let text = ''
+	let media = ''
+	let replies = ''
+	let retweets = ''
+	let likes = ''
+	if (contentFramechildElementCount === 4) {
+		replyTo = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(1)`);
+		text = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(2)`);
+		media = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(3)`);
+		replies = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(4) > div:nth-child(1)`)
+		retweets = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(4) > div:nth-child(2)`)
+		likes = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(4) > div:nth-child(3)`)
+	} else {
+		text = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(1)`);
+		media = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(2)`);
+		replies = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(3) > div:nth-child(1)`)
+		retweets = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(3) > div:nth-child(2)`)
+		likes = await tweet.$(`${SELECTORS.contentFrame} > div:nth-child(3) > div:nth-child(3)`)
+	}
+
+	/*
   const replyTo = await tweet.$(SELECTORS.replyTo);
   const text = await tweet.$(SELECTORS.text);
 
   const replies = await tweet.$(SELECTORS.replies);
   const retweets = await tweet.$(SELECTORS.retweets);
   const likes = await tweet.$(SELECTORS.likes);
-
+	*/
   return {
     avatar: await src(avatar),
     user: await innerText(user),
